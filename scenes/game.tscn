@@ -1,0 +1,438 @@
+[gd_scene format=3 uid="uid://dhlxl5geiuond"]
+
+[ext_resource type="Texture2D" uid="uid://d2tug4qq2m574" path="res://sprites/logo2.png" id="1_uwrxv"]
+[ext_resource type="Script" uid="uid://olnlx758r5fw" path="res://scripts/gameCtrl.gd" id="1_yqjtg"]
+[ext_resource type="Texture2D" uid="uid://cw0ck32swggp8" path="res://icon.svg" id="2_p57ef"]
+[ext_resource type="Script" uid="uid://4847nhqnqje" path="res://scripts/UICtrl.gd" id="3_0tnpc"]
+[ext_resource type="Shader" uid="uid://cicn27mwwfgdu" path="res://misc/greenscreenshader.gdshader" id="3_p57ef"]
+[ext_resource type="VideoStream" uid="uid://c5884yryn1c6r" path="res://misc/2550-160164595.ogv" id="4_p57ef"]
+[ext_resource type="Texture2D" uid="uid://bxtg336ckqx0w" path="res://sprites/flecha.png" id="6_gee14"]
+[ext_resource type="Shader" uid="uid://cdmvg7w405ce7" path="res://misc/byw.gdshader" id="6_p57ef"]
+[ext_resource type="Shader" uid="uid://djitx353rpymn" path="res://misc/disolve.gdshader" id="7_dinhu"]
+[ext_resource type="FontFile" uid="uid://c1ywawg4cb4h7" path="res://misc/Strong.ttf" id="7_u5sy4"]
+[ext_resource type="AudioStream" uid="uid://d1owq1ru85ci8" path="res://sound/tic.mp3" id="10_kvpfn"]
+[ext_resource type="AudioStream" uid="uid://bp0qvqlyb5dcy" path="res://sound/Campana1.mp3" id="11_dinhu"]
+[ext_resource type="AudioStream" uid="uid://cms06edmj30ib" path="res://sound/Campana2.mp3" id="12_kvuet"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_lnu2h"]
+shader = ExtResource("3_p57ef")
+shader_parameter/key_color = Color(0, 1, 0, 1)
+shader_parameter/similarity = 0.470000022325
+shader_parameter/smoothness = 0.08
+shader_parameter/spill = 0.1
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ir15t"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_trtic"]
+noise = SubResource("FastNoiseLite_ir15t")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_kvpfn"]
+shader = ExtResource("7_dinhu")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/mix_ratio = 0.0
+shader_parameter/dissolve_noise = SubResource("NoiseTexture2D_trtic")
+
+[sub_resource type="Shader" id="Shader_dinhu"]
+code = "shader_type canvas_item;
+
+uniform float dissolve_value : hint_range(0.0, 1.0);
+uniform float mix_ratio : hint_range(0, 1.0);
+uniform sampler2D dissolve_noise;
+uniform sampler2D dissolve_gradient;
+
+void fragment() {
+	vec4 main_texture = texture(TEXTURE, UV);
+	vec4 a = texture(dissolve_noise, UV);
+	vec4 b = texture(dissolve_gradient, UV);
+	vec4 noise_texture = mix(a,b, mix_ratio);
+	main_texture.a *= floor(dissolve_value + min(1, noise_texture.x));
+	COLOR = main_texture;
+}
+"
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_kvuet"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_ir15t"]
+noise = SubResource("FastNoiseLite_kvuet")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_dinhu"]
+shader = SubResource("Shader_dinhu")
+shader_parameter/dissolve_value = 1.0
+shader_parameter/mix_ratio = 0.0
+shader_parameter/dissolve_noise = SubResource("NoiseTexture2D_ir15t")
+
+[sub_resource type="Gradient" id="Gradient_gee14"]
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_u5sy4"]
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_p57ef"]
+noise = SubResource("FastNoiseLite_u5sy4")
+color_ramp = SubResource("Gradient_gee14")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_b52nb"]
+shader = ExtResource("6_p57ef")
+shader_parameter/projector_power = 0.114000005415
+shader_parameter/distortionTexture = SubResource("NoiseTexture2D_p57ef")
+shader_parameter/vignette_param = 10.0
+shader_parameter/saturation = 1.0
+shader_parameter/noise_intensity = 0.10000000475
+
+[sub_resource type="Animation" id="Animation_uwrxv"]
+resource_name = "BootUp"
+length = 4.0
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Arcadehead:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(307.2, -0.25, 0, 0.25, 0, 226, -0.33333334, 13.533336, 0, 0),
+"times": PackedFloat32Array(0, 2)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arcadehead:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(179.2, -0.25, 0, 0.25, 0, 98, -0.33333334, 13.533333, 0, 0),
+"times": PackedFloat32Array(0, 2)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arcadehead:scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(0.1, -0.25, 0, 0.25, 0, 0.12, -0.33333334, -0.0033333327, 0, 0),
+"times": PackedFloat32Array(0, 2)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Arcadehead:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0, 2),
+"points": PackedFloat32Array(0.1, -0.25, 0, 0.25, 0, 0.12, -0.33333334, -0.0033333327, 0, 0),
+"times": PackedFloat32Array(0, 2)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Arcadehead:modulate:r")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.16666667, 0, 0, 0, 1, -0.33333334, 0, 0, 0, 1, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 1, 3, 3.5)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Arcadehead:modulate:g")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.16666667, 0, 0, 0, 1, -0.33333334, 0, 0, 0, 1, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 1, 3, 3.5)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Arcadehead:modulate:b")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0, 1, -0.16666667, 0, 0, 0, 1, -0.33333334, 0, 0, 0, 1, -0.083333336, 0, 0, 0),
+"times": PackedFloat32Array(0, 1, 3, 3.5)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Arcadehead:modulate:a")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0, 2, 2, 2),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0, 1, -0.16666667, -0.16666667, 0, 0, 1, -0.33333334, 0, 0, 0, 0, -0.083333336, 0.16666667, 0, 0),
+"times": PackedFloat32Array(0, 1, 3, 3.5)
+}
+
+[sub_resource type="Animation" id="Animation_lnu2h"]
+length = 0.001
+tracks/0/type = "bezier"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Arcadehead:position:x")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(307.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/1/type = "bezier"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Arcadehead:position:y")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(179.2, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/2/type = "bezier"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Arcadehead:scale:x")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/3/type = "bezier"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Arcadehead:scale:y")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0.1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/4/type = "bezier"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Arcadehead:modulate:r")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/5/type = "bezier"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("Arcadehead:modulate:g")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/6/type = "bezier"
+tracks/6/imported = false
+tracks/6/enabled = true
+tracks/6/path = NodePath("Arcadehead:modulate:b")
+tracks/6/interp = 1
+tracks/6/loop_wrap = true
+tracks/6/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(1, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+tracks/7/type = "bezier"
+tracks/7/imported = false
+tracks/7/enabled = true
+tracks/7/path = NodePath("Arcadehead:modulate:a")
+tracks/7/interp = 1
+tracks/7/loop_wrap = true
+tracks/7/keys = {
+"handle_modes": PackedInt32Array(0),
+"points": PackedFloat32Array(0, -0.25, 0, 0.25, 0),
+"times": PackedFloat32Array(0)
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_yqjtg"]
+_data = {
+&"BootUp": SubResource("Animation_uwrxv"),
+&"RESET": SubResource("Animation_lnu2h")
+}
+
+[node name="Game" type="Node" unique_id=1528299254]
+script = ExtResource("1_yqjtg")
+
+[node name="Gameplay" type="Node2D" parent="." unique_id=837986129]
+
+[node name="Icon" type="Sprite2D" parent="Gameplay" unique_id=411659910]
+position = Vector2(714, 374)
+texture = ExtResource("2_p57ef")
+
+[node name="UI" type="Control" parent="." unique_id=488495678]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("3_0tnpc")
+metadata/_edit_use_anchors_ = true
+
+[node name="Subtitulos" type="RichTextLabel" parent="UI" unique_id=1617656688]
+custom_minimum_size = Vector2(820, 100)
+layout_mode = 1
+anchors_preset = 12
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_fonts/normal_font = ExtResource("7_u5sy4")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "zxczxczxczxcxczxczcxs"
+horizontal_alignment = 1
+vertical_alignment = 1
+visible_characters = 0
+visible_ratio = 0.0
+
+[node name="Contador" type="RichTextLabel" parent="UI" unique_id=1407328612]
+custom_minimum_size = Vector2(50, 50)
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -25.0
+offset_right = 25.0
+offset_bottom = 100.0
+grow_horizontal = 2
+theme_override_fonts/normal_font = ExtResource("7_u5sy4")
+theme_override_font_sizes/normal_font_size = 32
+bbcode_enabled = true
+text = "29"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Intro" type="Control" parent="." unique_id=129721567]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VideoStreamPlayer" type="VideoStreamPlayer" parent="Intro" unique_id=1012046180]
+material = SubResource("ShaderMaterial_lnu2h")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -256.0
+offset_top = -63.0
+offset_right = 640.0
+offset_bottom = 249.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.8, 0.8)
+stream = ExtResource("4_p57ef")
+buffering_msec = 1000
+
+[node name="LeftArrow" type="TextureRect" parent="Intro" unique_id=1728546887]
+material = SubResource("ShaderMaterial_kvpfn")
+layout_mode = 0
+offset_top = 522.0
+offset_right = 605.0
+offset_bottom = 934.0
+scale = Vector2(0.34969962, 0.34969962)
+texture = ExtResource("6_gee14")
+
+[node name="RightArrow" type="TextureRect" parent="Intro" unique_id=2069550136]
+material = SubResource("ShaderMaterial_dinhu")
+layout_mode = 0
+offset_left = 1024.0
+offset_top = 522.0
+offset_right = 1629.0
+offset_bottom = 934.0
+scale = Vector2(-0.35, 0.35)
+texture = ExtResource("6_gee14")
+
+[node name="Shaders" type="Control" parent="." unique_id=2009363555]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ByW" type="ColorRect" parent="Shaders" unique_id=1123098357]
+material = SubResource("ShaderMaterial_b52nb")
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BootUp" type="Control" parent="." unique_id=779761917]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ColorRect" type="ColorRect" parent="BootUp" unique_id=1811775917]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="Arcadehead" type="TextureRect" parent="BootUp" unique_id=1600050405]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(512, 512)
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 307.2
+offset_top = 179.2
+offset_right = 4403.2
+offset_bottom = 4275.2
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.1, 0.1)
+texture = ExtResource("1_uwrxv")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="BootUp" unique_id=1764173474]
+libraries/ = SubResource("AnimationLibrary_yqjtg")
+autoplay = &"BootUp"
+
+[node name="Sounds" type="Node" parent="." unique_id=990613759]
+
+[node name="Music" type="AudioStreamPlayer" parent="Sounds" unique_id=167252361]
+autoplay = true
+
+[node name="SFXTic" type="AudioStreamPlayer" parent="Sounds" unique_id=352098170]
+stream = ExtResource("11_dinhu")
+volume_db = 20.0
+
+[node name="SFXTac" type="AudioStreamPlayer" parent="Sounds" unique_id=410714761]
+stream = ExtResource("12_kvuet")
+volume_db = 20.0
+
+[node name="sfxWord" type="AudioStreamPlayer" parent="Sounds" unique_id=2108771316]
+stream = ExtResource("10_kvpfn")
+
+[connection signal="finished" from="Intro/VideoStreamPlayer" to="." method="_on_telon_finished"]
+[connection signal="animation_finished" from="BootUp/AnimationPlayer" to="." method="_on_bootup_animation_finished"]
